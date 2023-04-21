@@ -3,5 +3,6 @@ from .views import *
 
 urlpatterns = [
     path('', head_page),
-    path('cat/', categories)
+    path('cat/<slug:sl>/', categories),
+    path('test/', test)
 ]
