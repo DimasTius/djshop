@@ -1,0 +1,13 @@
+{% extends 'product/base.html' %}
+{% block mainmenu %}
+{% endblock mainmenu %}
+{% block content %}
+    <ul>
+        {% for p in prods %}
+            <h2>{{p.title}}</h2>
+            <p>Цвет - {{ p.color }}</p>
+            <p>Пол - {{ p.gender }}</p>
+            <p>{{ p.content }} </p>
+        {% endfor %}
+    </ul>
+{% endblock content %}
