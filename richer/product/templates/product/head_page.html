@@ -1,13 +1,17 @@
 {% extends 'product/base.html' %}
 {% block content %}
-    <div class="list-prod">
-        {% for p in prods %}
-            <div class="item">
-                <h2><a href="{{ p.get_absolute_url }}">{{ p.title }}</a></h2>
-                <p>Цвет - {{ p.color }}</p>
-                <p>Пол - {{ p.gender }}</p>
-                <p>{{ p.content|truncatewords:10 }} </p>
-            </div>
-        {% endfor %}
-    </div>
+<div class="list-prod">
+  {% for p in prods %}
+    <a href="{{ p.get_absolute_url }}" class="item"> <!-- Обернули весь контент в ссылку -->
+      {% if p.photo %}
+        <img src="{{p.photo.url}}" alt="{{p.title}}">
+      {% else %}
+        <div style="height: 200px;"></div>
+      {% endif %}
+      <h2>{{ p.title }}</h2>
+      <p>Цвет - {{ p.color }}</p>
+      <p class="price">{{ p.price }} руб.</p>
+    </a>
+  {% endfor %}
+</div>
 {% endblock content %}

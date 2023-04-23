@@ -1,6 +1,10 @@
 {% extends 'product/base.html' %}
 {% block content %}
-    {% autoescape off %}
-        {{ data }}
-    {% endautoescape %}
+    <div class="list-prod">
+        {% for c in cats %}
+            <div class="item">
+                <h2><a href="{{ c.get_absolute_url }}">{{ c.name }}</a></h2>
+            </div>
+        {% endfor %}
+    </div>
 {% endblock content %}
