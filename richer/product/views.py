@@ -1,5 +1,5 @@
 from django.http import HttpResponse, HttpResponseNotFound
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 
 # Create your views here.
 from django.template import loader
@@ -34,7 +34,15 @@ def cart(request):
     return HttpResponse('корзина')
 
 def show_product(request, prod_id):
-    return HttpResponse(f"Отображение продукта с id = {prod_id}")
+    prod = get_object_or_404(Product, pk=prod_id)
+
+    context = {
+        'prod': prod,
+        'menu': menu,
+        'title': prod.title,
+    }
+
+    return render(request, 'product/prod.html', context=context)
 
 def show_cat(request, cat_id):
     prods = Product.objects.filter(cat=cat_id)
