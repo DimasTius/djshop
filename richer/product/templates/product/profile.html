@@ -1,4 +1,6 @@
 {% extends 'product/base.html' %}
 {% block content %}
-    <li><a href="{% url logout %}">logout</a></li>
+    <h4>{{ name }}</h4>
+    <h4>{{ email }}</h4>
+    <h4><a href="{% url logout %}">logout</a></h4>
 {% endblock content %}

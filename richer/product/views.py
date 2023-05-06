@@ -30,12 +30,12 @@ def catalog(request):
 
 def logout_view(request):
     logout(request)
-    return redirect('home')
+    return redirect('profile')
 
 def register_and_login(request):
     if request.user.is_authenticated:
         title = 'Профиль'
-        context = {'title': title, 'menu': menu, 'logout': 'logout'}
+        context = {'title': title, 'menu': menu, 'logout': 'logout', 'name': request.user.first_name, 'email': request.user.email}
         return render(request, 'product/profile.html', context=context)
     else:
         if request.method == 'POST':
@@ -47,22 +47,27 @@ def register_and_login(request):
                 # Если пользователь существует, то производим авторизацию
                 user = authenticate(username=username, password=password)
                 login(request, user)
-                return redirect('home')
             elif form.is_valid():
                 username = form.cleaned_data.get('username')
                 password = form.cleaned_data.get('password1')
                 form.save()
                 user = authenticate(username=username, password=password)
                 login(request, user)
-                return redirect('home')
+            return redirect('profile')
         else:
             form = UserCreationForm()
     title = 'Профиль'
     context = {'title': title, 'menu': menu, 'form': form}
     return render(request, 'product/form_prof.html', context=context)
 
-def like(request):
-    return HttpResponse('понравившиеся')
+def liked(request):
+    if request.user.is_authenticated:
+        products = Product.objects.filter(likedproduct__user=request.user)
+        title = 'Избранное'
+        context = {'title': title, 'menu': menu, 'products': products}
+        return render(request, 'product/liked.html', context=context)
+    else:
+        return redirect('profile')
 
 def cart(request):
     return HttpResponse('корзина')

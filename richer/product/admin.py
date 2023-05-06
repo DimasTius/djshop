@@ -22,8 +22,14 @@ class PictureAdmin(admin.ModelAdmin):
     list_display_links = ('id', 'product')
     search_fields = ('product',)
 
+class LikedProductAdmin(admin.ModelAdmin):
+    list_display = ('user',)
+    list_display_links = ('user', )
+    search_fields = ('user', )
+
 
 
 admin.site.register(Product, ProductAdmin)
 admin.site.register(Catalog, CatalogAdmin)
 admin.site.register(Picture, PictureAdmin)
+admin.site.register(LikedProduct, LikedProductAdmin)

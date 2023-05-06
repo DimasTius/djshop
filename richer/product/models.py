@@ -42,6 +42,15 @@ class Catalog(models.Model):
         verbose_name_plural = 'Каталог'
         ordering = ('name', )
 
+class LikedProduct(models.Model):
+    user = models.OneToOneField(User, on_delete=models.PROTECT)
+    liked = models.ManyToManyField('Product')
+
+    class Meta:
+        verbose_name = 'Избранное'
+        verbose_name_plural = 'Избранные'
+        ordering = ('user', )
+
 class Picture(models.Model):
     product = models.ForeignKey('Product', on_delete=models.PROTECT)
     image = models.ImageField(upload_to='photos/%Y/%m/%d/')
