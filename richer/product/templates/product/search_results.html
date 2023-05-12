@@ -1,0 +1,19 @@
+{% extends 'product/base.html' %}
+
+{% block content %}
+    <h1>Результаты поиска для "{{ query }}"</h1>
+    <div class="list-prod">
+        {% for p in products %}
+            <a href="{{ p.get_absolute_url }}" class="item"> <!-- Обернули весь контент в ссылку -->
+                {% if p.photo %}
+                  <img src="{{p.photo.url}}" alt="{{p.title}}">
+                {% else %}
+                  <div style="height: 200px;"></div>
+                {% endif %}
+                    <h2>{{ p.title }}</h2>
+                    <p>Цвет - {{ p.color }}</p>
+                    <p class="price">{{ p.price }} руб.</p>
+            </a>
+        {% endfor %}
+    </div>
+    {% endblock %}

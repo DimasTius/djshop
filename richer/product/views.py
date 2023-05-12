@@ -3,6 +3,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.http import HttpResponse, HttpResponseNotFound
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.models import User
+from django.db.models import Q
 
 # Create your views here.
 from django.template import loader
@@ -27,6 +28,20 @@ def catalog(request):
     title = 'Каталог'
     context = {'title': title, 'menu': menu, 'cats': cats}
     return render(request, 'product/catalog.html', context)
+
+def search(request):
+    query = request.GET.get('q')
+    if query:
+        products = Product.objects.filter(Q(title__icontains=query) | Q(content__icontains=query))
+
+        context = {
+            'query': query,
+            'products': products,
+            'menu': menu
+        }
+        return render(request, 'product/search_results.html', context)
+    else:
+        return redirect('home')
 
 def logout_view(request):
     logout(request)
@@ -70,7 +85,13 @@ def liked(request):
         return redirect('profile')
 
 def cart(request):
-    return HttpResponse('корзина')
+    if request.user.is_authenticated:
+        products = Product.objects.filter(cartproduct__user=request.user)
+        title = 'Корзина'
+        context = {'title': title, 'menu': menu, 'products': products}
+        return render(request, 'product/cart.html', context=context)
+    else:
+        return redirect('profile')
 
 def show_product(request, prod_slug):
     prod = get_object_or_404(Product, slug=prod_slug)

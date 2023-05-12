@@ -51,6 +51,16 @@ class LikedProduct(models.Model):
         verbose_name_plural = 'Избранные'
         ordering = ('user', )
 
+class CartProduct(models.Model):
+    user = models.OneToOneField(User, on_delete=models.PROTECT)
+    cart = models.ManyToManyField('Product')
+
+    class Meta:
+        verbose_name = 'Корзина'
+        verbose_name_plural = 'Корзина'
+        ordering = ('user', )
+
+
 class Picture(models.Model):
     product = models.ForeignKey('Product', on_delete=models.PROTECT)
     image = models.ImageField(upload_to='photos/%Y/%m/%d/')

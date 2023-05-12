@@ -15,8 +15,8 @@
             <ul class="nav-links">
                 <li>
                     <div class="search">
-                      <form>
-                        <input type="text" placeholder="Поиск...">
+                      <form method="GET" action="{% url 'search' %}">
+                        <input type="text" name="q" placeholder="Поиск...">
                         <button type="submit">Найти</button>
                       </form>
                     </div>

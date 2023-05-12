@@ -10,4 +10,5 @@ urlpatterns = [
     path('product/<slug:prod_slug>/', show_product, name='product'),
     path('catalog/', catalog, name='catalog'),
     path('catalog/<slug:cat_slug>/', show_cat, name='catalog_slug'),
+    path('search/', search, name='search')
 ]
