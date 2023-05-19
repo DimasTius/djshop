@@ -3,7 +3,6 @@ from django.contrib.auth.forms import UserCreationForm
 from django.http import HttpResponse, HttpResponseNotFound
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.models import User
-from django.db.models import Q
 
 # Create your views here.
 from django.template import loader
@@ -32,7 +31,7 @@ def catalog(request):
 def search(request):
     query = request.GET.get('q')
     if query:
-        products = Product.objects.filter(Q(title__icontains=query) | Q(content__icontains=query))
+        products = Product.objects.filter(search_names__icontains=query)
 
         context = {
             'query': query,
@@ -48,9 +47,20 @@ def logout_view(request):
     return redirect('profile')
 
 def register_and_login(request):
+    user = request.user
     if request.user.is_authenticated:
         title = 'Профиль'
-        context = {'title': title, 'menu': menu, 'logout': 'logout', 'name': request.user.first_name, 'email': request.user.email}
+
+        if request.method == 'POST':
+            form = UserProfileForm(request.POST)
+            if form.is_valid():
+                form.save(user)
+
+        context = {'title': title,
+                   'menu': menu,
+                   'logout': 'logout',
+                   'user': user,
+                   }
         return render(request, 'product/profile.html', context=context)
     else:
         if request.method == 'POST':
@@ -84,6 +94,26 @@ def liked(request):
     else:
         return redirect('profile')
 
+def add_prod_liked(request):
+    if request.user.is_authenticated:
+        prod_id = request.POST.get('prod_id')  # id продукта, который нужно добавить в избранное
+        user = request.user  # текущий пользователь
+
+        # получаем экземпляр модели LikedProduct для текущего пользователя
+        liked_products, created = LikedProduct.objects.get_or_create(user=user)
+
+        # получаем экземпляр модели Product, который нужно добавить в список избранного
+        product = get_object_or_404(Product, id=prod_id)
+        if product in liked_products.liked.all():
+            liked_products.liked.remove(product)
+        else:
+            # добавляем продукт в список избранного пользователя
+            liked_products.liked.add(product)
+
+        return redirect('product', prod_slug=product.slug)
+    else:
+        return redirect('profile')
+
 def cart(request):
     if request.user.is_authenticated:
         products = Product.objects.filter(cartproduct__user=request.user)
@@ -93,16 +123,59 @@ def cart(request):
     else:
         return redirect('profile')
 
-def show_product(request, prod_slug):
-    prod = get_object_or_404(Product, slug=prod_slug)
-    #photos = Picture.objects.filter(pk=prod_id)
+def add_prod_cart(request):
+    if request.user.is_authenticated:
+        prod_id = request.POST.get('prod_id')  # id продукта, который нужно добавить в избранное
+        user = request.user  # текущий пользователь
 
-    context = {
-        #'photos': photos,
-        'prod': prod,
-        'menu': menu,
-        'title': prod.title,
-    }
+        # получаем экземпляр модели LikedProduct для текущего пользователя
+        cart_products, created = CartProduct.objects.get_or_create(user=user)
+
+        # получаем экземпляр модели Product, который нужно добавить в список избранного
+        product = get_object_or_404(Product, id=prod_id)
+        if product in cart_products.cart.all():
+            cart_products.cart.remove(product)
+        else:
+            # добавляем продукт в список избранного пользователя
+            cart_products.cart.add(product)
+
+        return redirect('product', prod_slug=product.slug)
+    return redirect('profile')
+
+def show_product(request, prod_slug):
+    if request.user.is_authenticated:
+        liked_products, created = LikedProduct.objects.get_or_create(user=request.user)
+        cart_products, created = CartProduct.objects.get_or_create(user=request.user)
+        prod = get_object_or_404(Product, slug=prod_slug)
+        if prod in liked_products.liked.all():
+            is_liked = 'Удалить из избранного'
+        else:
+            is_liked = 'Добавить в избранное'
+        if prod in cart_products.cart.all():
+            is_cart = 'Удалить из корзины'
+        else:
+            is_cart = 'Добавить в корзину'
+
+        #photos = Picture.objects.filter(pk=prod_id)
+
+        context = {
+            #'photos': photos,
+            'prod': prod,
+            'menu': menu,
+            'title': prod.title,
+            'is_liked': is_liked,
+            'is_cart': is_cart,
+            'log': True
+        }
+    else:
+        prod = get_object_or_404(Product, slug=prod_slug)
+        context = {
+            # 'photos': photos,
+            'prod': prod,
+            'menu': menu,
+            'title': prod.title,
+            'log': False
+        }
 
     return render(request, 'product/prod.html', context=context)
 

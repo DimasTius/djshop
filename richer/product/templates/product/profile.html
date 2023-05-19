@@ -1,6 +1,27 @@
 {% extends 'product/base.html' %}
 {% block content %}
-    <h4>{{ name }}</h4>
-    <h4>{{ email }}</h4>
-    <h4><a href="{% url logout %}">logout</a></h4>
-{% endblock content %}
+    <h1>Личный кабинет</h1>
+    <form method="post">
+        {% csrf_token %}
+        <label for="first_name">Имя:</label>
+        <input type="text" id="first_name" name="first_name" value="{{ user.first_name }}"><br>
+
+        <label for="last_name">Фамилия:</label>
+        <input type="text" id="last_name" name="last_name" value="{{ user.last_name }}"><br>
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" value="{{ user.email }}"><br>
+
+        <label for="phone">Телефон:</label>
+        <input type="number" id="phone" name="phone" value="{{ user.phone }}"><br>
+
+        <label for="street">Улица:</label>
+        <input type="text" id="street" name="street" value="{{ user.street }}"><br>
+
+        <label for="flat">Дом:</label>
+        <input type="text" id="flat" name="flat" value="{{ user.flat }}"><br>
+
+        <button type="submit">Сохранить</button>
+    </form>
+    <h4><a href="{% url 'logout' %}">logout</a></h4>
+{% endblock %}

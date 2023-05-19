@@ -4,6 +4,22 @@
             <div class="item">
                 <h2>{{ prod.title }}</h2>
                 <h3>{{ prod.price }}</h3>
+                {% if log %}
+                <h3>
+                    <form action="{% url 'add_prod_liked' %}" method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="prod_id" value="{{ prod.id }}">
+                        <button type="submit">{{ is_liked }}</button>
+                    </form></h3>
+                <h3>
+                    <form action="{% url 'add_prod_cart' %}" method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="prod_id" value="{{ prod.id }}">
+                        <button type="submit">{{ is_cart }}</button>
+                    </form>
+                </h3>
+
+                {% endif %}
             </div>
     </div>
 {% endblock content %}

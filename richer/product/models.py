@@ -12,6 +12,7 @@ class Product(models.Model):
     photo = models.ImageField(blank=True, upload_to='photos/%Y/%m/%d/')
     color = models.CharField(max_length=50)
     content = models.TextField(blank=True)
+    search_names = models.TextField(blank=True)
     gender = models.CharField(max_length=50)
     is_published = models.BooleanField(default=True)
     cat = models.ForeignKey('Catalog', on_delete=models.PROTECT)
@@ -69,5 +70,8 @@ class Picture(models.Model):
         verbose_name = 'Фотография'
         verbose_name_plural = 'Фотографии'
         ordering = ('product', )
+
+
+
 
 
