@@ -1,9 +1,15 @@
 {% extends 'product/base.html' %}
 {% block content %}
-    <div class="list-prod">
-            <div class="item">
-                <h2>{{ prod.title }}</h2>
-                <h3>{{ prod.price }}</h3>
+                {% if prod.photo %}
+                          <img src="{{prod.photo.url}}" alt="{{prod.title}}">
+                        {% else %}
+                            <div style="height: 200px;"></div>
+                        {% endif %}
+                            <a href="{{ prod.get_absolute_url }}" class="item"><h2>{{ prod.title }}</h2></a>
+                            <p>Цвет - {{ prod.color }}</p>
+                            <p>Пол - {{ prod.gender }}</p>
+                            <p>Описание - {{ prod.context }}</p>
+                            <p>{{ prod.price }} руб.</p>
                 {% if log %}
                 <h3>
                     <form action="{% url 'add_prod_liked' %}" method="POST">
@@ -18,8 +24,5 @@
                         <button type="submit">{{ is_cart }}</button>
                     </form>
                 </h3>
-
                 {% endif %}
-            </div>
-    </div>
 {% endblock content %}

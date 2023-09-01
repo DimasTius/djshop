@@ -180,3 +180,8 @@ text-decoration: none;
 .item a:hover {
 text-decoration: underline;
 }
+
+.test { display: flex; flex-wrap: wrap; justify-content: space-between; margin: 0 -10px; width: 100%; }
+.test > * { width: calc(100% / 3 - 20px); margin: 0 10px; } .test img { max-width: 100%; height: auto; }
+.test h2 { margin: 0; }
+.test form { margin-top: 10px; }

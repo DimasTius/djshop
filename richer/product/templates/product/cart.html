@@ -2,20 +2,25 @@
 {% block content %}
     <h1>{{ title }}</h1>
         {% if products %}
-            <div class="list-prod">
                 {% for p in products %}
-                    <a href="{{ p.get_absolute_url }}" class="item"> <!-- Обернули весь контент в ссылку -->
                         {% if p.photo %}
                           <img src="{{p.photo.url}}" alt="{{p.title}}">
                         {% else %}
-                          <div style="height: 200px;"></div>
+                            <div style="height: 200px;"></div>
                         {% endif %}
-                            <h2>{{ p.title }}</h2>
+                            <a href="{{ p.get_absolute_url }}" class="item"><h2>{{ p.title }}</h2></a>
                             <p>Цвет - {{ p.color }}</p>
-                            <p class="price">{{ p.price }} руб.</p>
-                    </a>
+                            <p>Пол - {{ p.gender }}</p>
+                            <p>Описание - {{ p.context }}</p>
+                            <p>{{ p.price }} руб.</p>
+                            <form action="{% url 'remove_prod_cart' %}" method="POST">
+                                {% csrf_token %}
+                                <input type="hidden" name="prod_id" value="{{ p.id }}">
+                                <button type="submit">Удалить из корзины</button>
+                            </form>
                 {% endfor %}
-            </div>
+            <p>Итого - {{ amount }}  руб.</p>
+            <a href="#"><h3>Перейти к оформлению заказа</h3></a>
         {% else %}
             <h2>В корзине нет товаров</h2>
         {% endif %}

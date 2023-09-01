@@ -44,7 +44,7 @@ class Catalog(models.Model):
         ordering = ('name', )
 
 class LikedProduct(models.Model):
-    user = models.OneToOneField(User, on_delete=models.PROTECT)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     liked = models.ManyToManyField('Product')
 
     class Meta:
@@ -53,7 +53,7 @@ class LikedProduct(models.Model):
         ordering = ('user', )
 
 class CartProduct(models.Model):
-    user = models.OneToOneField(User, on_delete=models.PROTECT)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     cart = models.ManyToManyField('Product')
 
     class Meta:

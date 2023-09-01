@@ -12,16 +12,7 @@
         <label for="email">Email:</label>
         <input type="email" id="email" name="email" value="{{ user.email }}"><br>
 
-        <label for="phone">Телефон:</label>
-        <input type="number" id="phone" name="phone" value="{{ user.phone }}"><br>
-
-        <label for="street">Улица:</label>
-        <input type="text" id="street" name="street" value="{{ user.street }}"><br>
-
-        <label for="flat">Дом:</label>
-        <input type="text" id="flat" name="flat" value="{{ user.flat }}"><br>
-
         <button type="submit">Сохранить</button>
     </form>
-    <h4><a href="{% url 'logout' %}">logout</a></h4>
+    <h4><a href="{% url 'logout' %}">Выход</a></h4>
 {% endblock %}
